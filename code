@@ -1,0 +1,27 @@
+# Docs: https://docs.scrapy.org/en/latest/intro/tutorial.html
+import scrapy
+
+"""
+Define a spider class and use it to scrape information from the chosen webpage
+Run the following in top level directory in terminal to create html file
+>>> scrapy crawl dematology
+"""
+
+class DermatologySpider(scrapy.Spider):
+    name = "dermatology"
+    start_urls = ['https://www.fhea.com/Store/DetailProducts.aspx?id=67']
+
+    def parse(self, response):
+        page = response.url.split("/")[-2]
+        filename = 'dermatology-%s.csv' % page
+        with open(filename, 'wb') as f:
+            f.write(response.body)
+
+"""
+Possible next steps to parse the scraped data in terminal:
+>>> scrapy shell 'https://www.fhea.com/Store/DetailProducts.aspx?id=67'
+>>> response.css('title')
+>>> response.css('title::text').get()
+Add use of regular expressions:
+>>> response.css('title::text').re(r'Dermatology.*')
+"""
